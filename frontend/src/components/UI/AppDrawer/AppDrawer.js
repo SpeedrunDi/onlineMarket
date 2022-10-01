@@ -11,7 +11,7 @@ const AppDrawer = () => {
 
   useMemo(() => {
     dispatch(fetchCategories());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Drawer

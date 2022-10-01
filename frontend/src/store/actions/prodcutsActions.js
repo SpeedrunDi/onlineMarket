@@ -56,18 +56,6 @@ export const fetchProducts = (query) => {
 
       dispatch(fetchProductsSuccess(response.data));
     } catch (e) {
-      if (e.response.status === 401) {
-        toast.warn('You need login!', {
-          position: "top-right",
-          autoClose: 3500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-
       dispatch(fetchProductsFailure(e.message));
     }
   }
@@ -83,10 +71,30 @@ export const createProduct = (productData) => {
       dispatch(createProductRequest());
       await axiosApi.post('/products', productData, {headers});
       dispatch(createProductSuccess());
+      toast.success('You created product!', {
+        position: "top-right",
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (e) {
       if (e.response && e.response.data) {
         dispatch(createProductFailure(e.response.data));
       } else {
+        if (e.response.status === 401) {
+          toast.warn('You need login!', {
+            position: "top-right",
+            autoClose: 3500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
         dispatch(createProductFailure({global: 'No internet'}));
       }
       throw e;
@@ -106,6 +114,15 @@ export const deleteProduct = id => {
       await axiosApi.delete('/products/' + id, {headers});
 
       dispatch(deleteProductSuccess());
+      toast.success('You deleted product!', {
+        position: "top-right",
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (e) {
       dispatch(deleteProductFailure(e));
       throw e;

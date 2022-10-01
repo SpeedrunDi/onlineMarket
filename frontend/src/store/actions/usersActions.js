@@ -1,4 +1,5 @@
 import axiosApi from "../../axiosApi";
+import {toast} from "react-toastify";
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
@@ -15,7 +16,7 @@ export const LOGOUT_USER_SUCCESS = 'LOGOUT_USER_SUCCESS';
 export const LOGOUT_USER_FAILURE = 'LOGOUT_USER_FAILURE';
 
 const registerUserRequest = () => ({type: REGISTER_USER_REQUEST});
-const registerUserSuccess = () => ({type: REGISTER_USER_SUCCESS});
+const registerUserSuccess = user => ({type: REGISTER_USER_SUCCESS, payload: user});
 const registerUserFailure = error => ({type: REGISTER_USER_FAILURE, payload: error});
 export const clearRegisterErrors = () => ({type: CLEAR_REGISTER_ERRORS});
 
@@ -33,9 +34,18 @@ export const registerUser = userData => {
     try {
       dispatch(registerUserRequest());
 
-      await axiosApi.post('/users', userData);
+      const {data} = await axiosApi.post('/users', userData);
 
-      dispatch(registerUserSuccess());
+      dispatch(registerUserSuccess(data));
+      toast.success('Successful register!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (e) {
       if (e.response && e.response.data) {
         dispatch(registerUserFailure(e.response.data));
@@ -52,9 +62,18 @@ export const loginUser = userData => {
     try {
       dispatch(loginUserRequest());
 
-      const response = await axiosApi.post('/users/sessions', userData);
+      const {data} = await axiosApi.post('/users/sessions', userData);
 
-      dispatch(loginUserSuccess(response.data.user));
+      dispatch(loginUserSuccess(data.user));
+      toast.success('Successful login!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (e) {
       if (e.response && e.response.data) {
         dispatch(loginUserFailure(e.response.data));
@@ -76,6 +95,15 @@ export const logoutUser = () => {
       await axiosApi.delete('/users/sessions', {headers});
 
       dispatch(logoutUserSuccess());
+      toast.warn('You logout!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (e) {
       dispatch(logoutUserFailure(e));
     }
