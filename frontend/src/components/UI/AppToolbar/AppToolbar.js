@@ -2,8 +2,6 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {makeStyles} from "tss-react/mui";
-import 'react-toastify/dist/ReactToastify.css';
-import {ToastContainer} from "react-toastify";
 import {AppBar, Grid, Toolbar, Typography} from "@mui/material";
 import Anonymous from "./Menu/Anonymous";
 import UserMenu from "./Menu/UserMenu";
@@ -29,8 +27,6 @@ const AppToolbar = () => {
   return (
     <>
      <AppBar position="fixed">
-       <ToastContainer />
-
        <Toolbar>
          <Grid container justifyContent="space-between" alignItems="center">
            <Grid item>

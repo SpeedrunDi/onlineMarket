@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {logoutUser} from "../../../../store/actions/usersActions";
+import {Link} from "react-router-dom";
 
 const UserMenu = ({user}) => {
   const dispatch = useDispatch();
@@ -41,8 +42,7 @@ const UserMenu = ({user}) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose} component={Link} to="/add_new_product">Add new product</MenuItem>
         <MenuItem onClick={() => dispatch(logoutUser())}>Logout</MenuItem>
       </Menu>
     </div>
