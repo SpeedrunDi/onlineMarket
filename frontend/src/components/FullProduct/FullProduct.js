@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import imageNotAvailable from "../../assets/image-not-available.jpg";
 import {apiUrl} from "../../config";
 
-const FullProduct = ({product, user}) => {
+const FullProduct = ({product, user, onDeleteProduct}) => {
   let image = imageNotAvailable;
 
   if (product.image) {
@@ -16,7 +16,7 @@ const FullProduct = ({product, user}) => {
     if (user._id === product.user._id) {
       btnDelete = (
         <Grid item paddingRight="20px">
-          <Button variant="outlined" color="warning">
+          <Button variant="outlined" color="warning" onClick={onDeleteProduct}>
             Delete
           </Button>
         </Grid>

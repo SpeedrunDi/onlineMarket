@@ -13,6 +13,10 @@ export const CREATE_PRODUCT_REQUEST = 'CREATE_PRODUCT_REQUEST';
 export const CREATE_PRODUCT_SUCCESS = 'CREATE_PRODUCT_SUCCESS';
 export const CREATE_PRODUCT_FAILURE = 'CREATE_PRODUCT_FAILURE';
 
+export const DELETE_PRODUCT_REQUEST = 'DELETE_PRODUCT_REQUEST';
+export const DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
+export const DELETE_PRODUCT_FAILURE = 'DELETE_PRODUCT_FAILURE';
+
 const fetchProductRequest = () => ({type: FETCH_PRODUCT_REQUEST});
 const fetchProductSuccess = product => ({type: FETCH_PRODUCT_SUCCESS, payload: product});
 const fetchProductFailure = error => ({type: FETCH_PRODUCT_FAILURE, payload: error});
@@ -24,6 +28,10 @@ const fetchProductsFailure = error => ({type: FETCH_PRODUCTS_FAILURE, payload: e
 const createProductRequest = () => ({type: CREATE_PRODUCT_REQUEST});
 const createProductSuccess = () => ({type: CREATE_PRODUCT_SUCCESS});
 const createProductFailure = error => ({type: CREATE_PRODUCT_FAILURE, payload: error});
+
+const deleteProductRequest = () => ({type: DELETE_PRODUCT_REQUEST});
+const deleteProductSuccess = () => ({type: DELETE_PRODUCT_SUCCESS});
+const deleteProductFailure = error => ({type: DELETE_PRODUCT_FAILURE, payload: error});
 
 export const fetchProduct = id => {
   return async dispatch => {
@@ -81,6 +89,25 @@ export const createProduct = (productData) => {
       } else {
         dispatch(createProductFailure({global: 'No internet'}));
       }
+      throw e;
+    }
+  }
+};
+
+export const deleteProduct = id => {
+  return async (dispatch, getState) => {
+    try {
+      const headers = {
+        'Authorization': getState().users.user && getState().users.user.token,
+      };
+
+      dispatch(deleteProductRequest());
+
+      await axiosApi.delete('/products/' + id, {headers});
+
+      dispatch(deleteProductSuccess());
+    } catch (e) {
+      dispatch(deleteProductFailure(e));
       throw e;
     }
   }

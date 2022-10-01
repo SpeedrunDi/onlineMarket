@@ -15,7 +15,7 @@ const Products = () => {
     dispatch(fetchProducts(query));
   }, [dispatch, query]);
 
-  return (
+  return loading ? <Box sx={{textAlign: 'center'}}><CircularProgress/></Box> : (
     <Grid container direction="column" spacing={2}>
       <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
@@ -24,20 +24,17 @@ const Products = () => {
           </Typography>
         </Grid>
       </Grid>
-      {loading
-        ? <Box sx={{textAlign: 'center'}}><CircularProgress/></Box>
-        : <Grid item container spacing={3}>
-          {products.map(product => (
-            <ProductItem
-              key={product._id}
-              id={product._id}
-              title={product.title}
-              price={product.price}
-              image={product.image}
-            />
-          ))}
-        </Grid>
-      }
+      <Grid item container spacing={3}>
+        {products.length !== 0 ? products.map(product => (
+          <ProductItem
+            key={product._id}
+            id={product._id}
+            title={product.title}
+            price={product.price}
+            image={product.image}
+          />
+        )) : <Typography variant="h3" margin="30px 0 0 10%">No products</Typography> }
+      </Grid>
     </Grid>
   );
 };

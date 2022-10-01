@@ -84,4 +84,24 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
   }
 });
 
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const products = await Product.findById({_id: req.params.id}, 'user');
+
+    if (!products) {
+      return res.status(404).send({message: "Product not found!"});
+    }
+
+    if (req.user._id.equals(products.user)) {
+      await Product.deleteOne({_id: req.params.id});
+
+      return res.send({message: 'Task deleted!'});
+    }
+
+    res.status(403).send({message: "You not have right!"});
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 module.exports = router;
