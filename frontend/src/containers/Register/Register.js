@@ -27,7 +27,7 @@ const useStyles = makeStyles()(theme => ({
   }
 }));
 
-const Register = () => {
+const Register = ({history}) => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
   const error = useSelector(state => state.users.registerError);
@@ -36,6 +36,8 @@ const Register = () => {
   const [user, setUser] = useState({
     username: '',
     password: '',
+    name: '',
+    phone: ''
   });
 
   useEffect(() => {
@@ -50,10 +52,12 @@ const Register = () => {
     setUser(prev => ({...prev, [name]: value}));
   };
 
-  const submitFormHandler = e => {
+  const submitFormHandler = async e => {
     e.preventDefault();
 
-    dispatch(registerUser({...user}));
+    await dispatch(registerUser({...user}));
+
+    history.replace('/');
   };
 
   const getFieldError = fieldName => {
@@ -97,6 +101,26 @@ const Register = () => {
             value={user.password}
             onChange={inputChangeHandler}
             error={getFieldError('password')}
+          />
+
+          <FormElement
+            type="name"
+            required={true}
+            label="name"
+            name="name"
+            value={user.name}
+            onChange={inputChangeHandler}
+            error={getFieldError('phone')}
+          />
+
+          <FormElement
+            type="phone"
+            required={true}
+            label="phone"
+            name="phone"
+            value={user.phone}
+            onChange={inputChangeHandler}
+            error={getFieldError('phone')}
           />
 
           <Grid item xs={12}>

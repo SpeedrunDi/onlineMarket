@@ -31,7 +31,7 @@ const useStyles = makeStyles()(theme => ({
   },
 }));
 
-const Login = () => {
+const Login = ({history}) => {
   const { classes } = useStyles();
 
   const dispatch = useDispatch();
@@ -54,10 +54,12 @@ const Login = () => {
     setUser(prev => ({...prev, [name]: value}));
   };
 
-  const submitFormHandler = e => {
+  const submitFormHandler = async e => {
     e.preventDefault();
 
-    dispatch(loginUser({...user}));
+    await dispatch(loginUser({...user}));
+
+    history.replace('/');
   };
 
   return (
