@@ -40,15 +40,11 @@ export const fetchProduct = id => {
 };
 
 export const fetchProducts = (query) => {
-  return async (dispatch, getState) => {
+  return async dispatch => {
     try {
-      const headers = {
-        'Authorization': getState().users.user && getState().users.user.token,
-      };
-
       dispatch(fetchProductsRequest());
 
-      const response = await axiosApi('/products' + query, {headers});
+      const response = await axiosApi('/products' + query);
 
       dispatch(fetchProductsSuccess(response.data));
     } catch (e) {
@@ -70,13 +66,21 @@ export const fetchProducts = (query) => {
 };
 
 export const createProduct = (productData) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
+      const headers = {
+        'Authorization': getState().users.user && getState().users.user.token,
+      };
+
       dispatch(createProductRequest());
-      await axiosApi.post('/products', productData);
+      await axiosApi.post('/products', productData, {headers});
       dispatch(createProductSuccess());
     } catch (e) {
-      dispatch(createProductFailure(e.message));
+      if (e.response && e.response.data) {
+        dispatch(createProductFailure(e.response.data));
+      } else {
+        dispatch(createProductFailure({global: 'No internet'}));
+      }
       throw e;
     }
   }

@@ -37,7 +37,7 @@ const AppDrawer = () => {
           {categories && categories.map((category) => (
             <ListItem key={category._id} disablePadding>
               <ListItemButton component={Link} to={`/?category=${category._id}`}>
-                <ListItemText primary={category.title} />
+                <ListItemText primary={category.title}/>
               </ListItemButton>
             </ListItem>
           ))}

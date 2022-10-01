@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   const query = {};
 
   if (req.query.category) {
@@ -29,7 +29,8 @@ router.get('/', auth, async (req, res) => {
 
   try {
     const products = await Product
-      .find(query);
+      .find(query)
+      .populate('user', 'name phone');
 
     res.send(products);
   } catch (e) {
@@ -62,7 +63,8 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
     title,
     price,
     category,
-    description,
+    user: req.user._id,
+    description: description || null,
     image: null,
   };
 

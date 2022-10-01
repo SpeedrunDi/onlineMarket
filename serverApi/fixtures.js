@@ -15,27 +15,7 @@ const run = async () => {
     await mongoose.connection.db.dropCollection(coll.name);
   }
 
-  const [Category1, Category2] = await Category.create({
-    title: 'Video cards',
-    description: '',
-  }, {
-    title: 'CPUs',
-    description: '',
-  });
-
-  await Product.create({
-    title: "Nvidia RTX 3080",
-    price: 2000,
-    category: Category2._id,
-    image: 'fixtures/cpu.jpg',
-  }, {
-    title: "i3 11 500",
-    price: 150000,
-    category: Category1._id,
-    image: 'fixtures/rtx3080.jpg',
-  });
-
-  await User.create({
+  const [Admin, Test] = await User.create({
     username: 'admin',
     password: 'admin',
     name: "Sam",
@@ -47,6 +27,41 @@ const run = async () => {
     name: "Jack",
     phone: "+996 000 000 000",
     token: nanoid(),
+  });
+
+  const [Category1, Category2, Category3, Category4] = await Category.create({
+    title: 'Video cards',
+    description: '',
+  }, {
+    title: 'CPUs',
+    description: '',
+  }, {
+    title: 'Notebooks',
+    description: '',
+  }, {
+    title: 'Chairs',
+    description: '',
+  });
+
+  await Product.create({
+    title: "Nvidia RTX 3080",
+    price: 2000,
+    category: Category2._id,
+    user: Admin._id,
+    image: 'fixtures/cpu.jpg',
+  }, {
+    title: "i3 11 500",
+    price: 150000,
+    category: Category1._id,
+    user: Admin._id,
+    image: 'fixtures/rtx3080.jpg',
+  }, {
+    title: "lenovo",
+    description: "ryzen 5 5300u",
+    price: 70000,
+    category: Category3._id,
+    user: Admin._id,
+    image: 'fixtures/notebook.jpg',
   });
 
   await mongoose.connection.close();

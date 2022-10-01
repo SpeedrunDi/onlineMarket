@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, FormControl, FormHelperText, Grid, InputLabel, Select} from "@mui/material";
 import FileInput from "../UI/Form/FileInput/FileInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormElement from "../UI/Form/FormElement/FormElement";
 
-const ProductForm = ({onSubmit}) => {
-  const [state, setState] = useState({
+const ProductForm = ({onSubmit, categories, error}) => {
+  const [newProduct, setNewProduct] = useState({
     title: "",
     price: "",
+    category: "",
     description: "",
     image: "",
   });
@@ -14,8 +17,8 @@ const ProductForm = ({onSubmit}) => {
     e.preventDefault();
     const formData = new FormData();
 
-    Object.keys(state).forEach(key => {
-      formData.append(key, state[key]);
+    Object.keys(newProduct).forEach(key => {
+      formData.append(key, newProduct[key]);
     });
 
     onSubmit(formData);
@@ -24,7 +27,7 @@ const ProductForm = ({onSubmit}) => {
   const inputChangeHandler = e => {
     const {name, value} = e.target;
 
-    setState(prevState => {
+    setNewProduct(prevState => {
       return {...prevState, [name]: value};
     });
   };
@@ -33,7 +36,15 @@ const ProductForm = ({onSubmit}) => {
     const name = e.target.name;
     const file = e.target.files[0];
 
-    setState(prevState => ({...prevState, [name]: file}));
+    setNewProduct(prevState => ({...prevState, [name]: file}));
+  };
+
+  const getFieldError = fieldName => {
+    try {
+      return error.errors[fieldName].message;
+    } catch {
+      return undefined;
+    }
   };
 
   return (
@@ -50,35 +61,50 @@ const ProductForm = ({onSubmit}) => {
         rowSpacing={2}
       >
         <Grid item>
-          <TextField
-            label="Title"
-            name="title"
-            value={state.title}
-            onChange={inputChangeHandler}
-          />
+          <FormControl required fullWidth error={getFieldError('category')}>
+            <InputLabel id="select-category">Select category</InputLabel>
+            <Select
+              labelId="select-category"
+              name="category"
+              value={newProduct.category}
+              label="Select category"
+              onChange={inputChangeHandler}
+            >
+              {categories !== 0 && categories.map(category => (
+                <MenuItem key={category._id} value={category._id}>
+                  {category.title}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>{getFieldError('category')}</FormHelperText>
+          </FormControl>
         </Grid>
+        <FormElement
+          required={true}
+          onChange={inputChangeHandler}
+          name="title"
+          label="Title"
+          value={newProduct.title}
+          error={getFieldError('title')}
+        />
 
-        <Grid item>
-          <TextField
-            type="number"
-            label="Price"
-            name="price"
-            value={state.price}
-            onChange={inputChangeHandler}
-          />
-        </Grid>
+        <FormElement
+          required={true}
+          onChange={inputChangeHandler}
+          type="number"
+          name="price"
+          label="Price"
+          value={newProduct.price}
+          error={getFieldError('price')}
+        />
 
-        <Grid item>
-          <TextField
-            required
-            multiline
-            rows={3}
-            label="Description"
-            name="description"
-            value={state.description}
-            onChange={inputChangeHandler}
-          />
-        </Grid>
+        <FormElement
+          onChange={inputChangeHandler}
+          name="description"
+          label="Description"
+          value={newProduct.description}
+          error={getFieldError('description')}
+        />
 
         <Grid item>
           <FileInput
