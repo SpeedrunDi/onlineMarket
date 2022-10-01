@@ -5,11 +5,13 @@ import Login from "./containers/Login/Login";
 import Layout from "./components/UI/Layout/Layout";
 import AddProduct from "./containers/AddProduct/AddProduct";
 import ProductsLayout from "./components/UI/Layout/ProductsLayout";
+import Product from "./containers/Product/Product";
 
 const App = () => (
   <Layout>
     <Switch>
       <Route path="/" exact component={ProductsLayout}/>
+      <Route path="/products/:id" component={Product}/>
       <Route path="/register" component={Register}/>
       <Route path="/login" component={Login}/>
       <Route path="/add_new_product" component={AddProduct}/>

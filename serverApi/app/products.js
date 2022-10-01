@@ -29,8 +29,7 @@ router.get('/', async (req, res) => {
 
   try {
     const products = await Product
-      .find(query)
-      .populate('user', 'name phone');
+      .find(query);
 
     res.send(products);
   } catch (e) {
@@ -40,7 +39,10 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product
+      .findById(req.params.id)
+      .populate('user', 'name phone')
+      .populate('category', 'title');
 
     if (!product) {
       res.status(404).send({message: 'Product not found!'});
