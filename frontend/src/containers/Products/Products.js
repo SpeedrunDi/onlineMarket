@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import {Link, Redirect} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Button, CircularProgress, Grid, Typography} from "@mui/material";
+import {useLocation} from "react-router-dom";
+import {Box, CircularProgress, Grid, Typography} from "@mui/material";
 import {fetchProducts} from "../../store/actions/prodcutsActions";
 import ProductItem from "../../components/ProductItem/ProductItem";
 
@@ -9,15 +9,11 @@ const Products = () => {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.products.fetchLoading);
   const products = useSelector(state => state.products.products);
-  const user = useSelector(state => state.users.user);
+  const query = useLocation().search;
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
-
-  if (!user) {
-    return <Redirect to="/login"/>
-  }
+    dispatch(fetchProducts(query));
+  }, [dispatch, query]);
 
   return (
     <Grid container direction="column" spacing={2}>

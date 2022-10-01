@@ -23,6 +23,10 @@ const upload = multer({storage});
 router.get('/', auth, async (req, res) => {
   const query = {};
 
+  if (req.query.category) {
+    query.category = {$eq: req.query.category};
+  }
+
   try {
     const products = await Product
       .find(query);

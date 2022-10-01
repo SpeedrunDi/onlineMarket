@@ -1,4 +1,5 @@
-import React, {useMemo} from 'react';
+import React from 'react';
+import {Redirect} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {Typography} from "@mui/material";
 import ProductForm from "../../components/ProductForm/ProductForm";
@@ -8,11 +9,9 @@ const AddProduct = ({history}) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.users.user);
 
-  useMemo(() => {
-    if (!user) {
-      history.push('/login');
-    }
-  }, []);
+  if (!user) {
+    return <Redirect to="/login"/>
+  }
 
   const onProductFormSubmit = async productData => {
     await dispatch(createProduct(productData));

@@ -39,7 +39,7 @@ export const fetchProduct = id => {
   }
 };
 
-export const fetchProducts = () => {
+export const fetchProducts = (query) => {
   return async (dispatch, getState) => {
     try {
       const headers = {
@@ -48,7 +48,7 @@ export const fetchProducts = () => {
 
       dispatch(fetchProductsRequest());
 
-      const response = await axiosApi('/products', {headers});
+      const response = await axiosApi('/products' + query, {headers});
 
       dispatch(fetchProductsSuccess(response.data));
     } catch (e) {
